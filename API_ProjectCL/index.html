@@ -1,0 +1,301 @@
+<!doctype html>
+<html>
+<head>
+        <title>AnimeSuggest</title>
+        <link rel="stylesheet" href="API.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+</head>
+
+
+
+
+<body>
+
+    <h1>AnimeSuggest</h1>
+    
+
+    <nav>
+        <div class="nav">
+            <a id="Suggest" class="active">Suggest</a>
+            <a id="About">About</a>
+        </div>
+    </nav>
+
+    <br>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-2">
+            </div>
+
+                <div id="div-Suggest" class="col-md-8" >
+                <h2>
+                Weather Based Anime Suggestion
+                </h2>
+
+            
+                    <p> AnimeSuggest provides suggestion of Anime to you based on the current weather in your area. </p>
+
+                    <br>
+
+                    <h3>
+                        Suggestion Example
+                    </h3>
+                    <table>
+                        <tr>
+                            <th>Weather</th>
+                            <th>Anime Genre</th>
+                        </tr>
+                        <tr>
+                            <td>Rain</td>
+                            <td>Horror</td>
+                        </tr>
+                        <tr>
+                            <td>Clear</td>
+                            <td>Comedy</td>
+                        </tr>
+                    </table>
+
+                    <br>
+                    <h2>Current weather condition at your location:</h2>
+                    <p id= "weather"></p>
+                    <h2>Select your weather condition from list and hit suggest for Anime!(If not listed, choose random for a random anime!)</h2>
+                        
+                    <select id="userWeather" onChange="getSelectValue();">
+                        <option value= "" >Choose Condition</option>
+                        <option value= "Cloudy" >Cloudy</option>    
+                        <option value= "Rain" >Rain</option>
+                        <option value= "Clear" >Clear</option>
+                        <option value= "Sunny" >Sunny</option>
+                        <option value= "Snow" >Snow</option>
+                        <option value= "Overcast" >Overcast</option>
+                        <option value= "Heavy Thunderstorm" >Heavy Thunderstorm</option>
+                        <option value= "Random" >Random</option>
+                    
+                    </select>
+
+                    <button onclick="myJavascriptFunction()">Click me</button>
+
+                    <p id="textDisplayed2"></p>
+
+                    <br>
+
+                
+
+                    <h2>(Survey) Who's your favorite anime character?</h2>
+                    <form>
+                        <p>Character Name: <input type="text" id="textEntered1"></p>
+                
+                        <p><input type="button" id="btn_1" value="Enter"></p>
+                        <div id="textDisplayed1"></div>
+                    </form>
+                    <br>
+
+
+                    <img src="Anime.png" alt= "Anime Collage" class= "center">
+
+                </div>
+
+                <div id="div-About" class="col-md-8" >
+                    <h2>
+                        Weather Based Anime Suggestion
+                        </h2>
+                    
+                        <body>
+                            <p> AnimeSuggest provides suggestions of anime to you based on the current weather in your area. </p>
+                            <p>Why are the suggestions based on weather? As we all know, weather effects us immensely.</p>
+                            <p> Weather can set your mood and can add to the impact and immersion of entertainment you are consuming.</p>
+                            <p> By using your weather data we can suggest animes that fit with your mood and atmosphere. </p>
+                    
+                    
+                        <table>
+                            <tr>
+                                <th>Creator</th>
+                                <th>Contact</th>
+                    
+                            </tr>
+                            <tr>
+                                <td>Chris Lalu</td>
+                                <td>tul23608@temple.edu</td>
+                    
+                            </tr>
+                            <tr>
+                    
+                            </tr>
+                        </table>
+                    
+                        <p>
+                            Enjoy your new anime!
+                        </p>
+                </div>
+
+            <div class="col-md-2">
+            </div>
+        </div>
+    </div>
+</body>
+
+
+
+
+
+<script>
+
+$('#div-Suggest').show();
+$('#div-About').hide();
+
+
+
+    // location get api
+        $.getJSON("https://ipgeolocation.abstractapi.com/v1/?api_key=41b35af8793c40819cf4cf013b54802c", function(data) {
+        console.log(data);
+            var longlat = data["longitude"]+","+ data["latitude"];
+
+             // weather get api (long,lat)
+            $.getJSON("https://devapi.qweather.com/v7/weather/now?unit=i&lang=en&key=86a7ff0e360e463db560e321bd071d25",{"location" : longlat}, function(data){
+            console.log(data);
+            var conditions = data["now"]["text"];
+            $('#weather').html(conditions);
+            });
+        })
+        function getSelectValue()
+        {
+            var selectedValue = document.getElementById("userWeather").value;
+            console.log(selectedValue);
+            return selectedValue;
+        }
+
+        //anime post api
+        function gen(){
+
+            let myShows = ["Drama", "Horror", "Comedy", "Action", "Adventure", "Ecchi", "Fantasy", "Mahou Shoujo", "Mecha", "Music", "Mystery", "Psychological", "Romance", "Sports", "Supernatural", "Thriller"];
+            let show = myShows[Math.floor(Math.random() * myShows.length)];
+
+            var sel = getSelectValue();
+            if (sel == "Rain"){
+                return "Horror";
+            }
+            if (sel == "Clear"){
+                return "Comedy";
+            }
+            if (sel == "Sunny"){
+                return "Adventure";
+            }
+            if (sel == "Cloudy"){
+                return "Romance";
+            }
+            if (sel == "Snow"){
+                return "Supernatural";
+            }
+            if (sel == "Overcast"){
+                return "Music";
+            }
+            if (sel == "Heavy Thunderstorm"){
+                return "Drama";
+            }
+            if (sel == "Random"){
+                return show;
+            }
+
+
+        }
+
+        function myJavascriptFunction(){
+
+        var weather_genre = gen();
+       // Here we define our query as a multi-line string
+        // Storing it in a separate .graphql/.gql file is also possible
+        var query = `
+            query ($genre: String) { # Define which variables will be used in the query (id)
+            Media (type: ANIME, genre: $genre) { # Insert our variables into the query arguments (id) (type: ANIME is hard-coded in the query)
+                genres
+                title {
+                english
+                }
+            }
+            }
+            `;
+                // Define our query variables and values that will be used in the query request
+                var variables = {
+                    genre: weather_genre
+               };
+                // Define the config we'll need for our Api request
+                var url = 'https://graphql.anilist.co',
+                    options = {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            query: query,
+                            variables: variables
+                        })
+                    };
+                // Make the HTTP Api request
+                fetch(url, options).then(handleResponse)
+                    .then(handleData)
+                    .catch(handleError);
+                function handleResponse(response) {
+                    return response.json().then(function (json) {
+                        return response.ok ? json : Promise.reject(json);
+                    });
+                }
+                function handleData(data) {
+                    console.log(data);
+                    var text = data["data"]["Media"]["title"]["english"];
+                    $('#textDisplayed2').html("Anime: " + text);
+                }
+                function handleError(error) {
+                    alert('Error, check console');
+                    console.error(error);
+                }
+            }
+
+            
+
+
+
+     function isText(x){
+        if (isNaN(x)){
+            return "Thanks!";
+        }
+        else{
+            return "Bad data. Try again."
+        }
+
+    }
+
+
+    $('#btn_1').click(function(){
+
+	let x = $('#textEntered1').val();
+
+
+    let message = isText(x);
+	$('#textDisplayed1').html(message);
+    });
+
+
+    $('#Suggest').click(function(){
+    $('#div-Suggest').show();
+    $('#div-About').hide();
+    $('#Suggest').addClass("active")
+    $('#About').removeClass("active")
+    });
+
+
+    $('#About').click(function(){
+    $('#div-Suggest').hide();
+    $('#div-About').show();
+    $('#About').addClass("active")
+    $('#Suggest').removeClass("active")
+});
+
+
+</script>
+</html>
